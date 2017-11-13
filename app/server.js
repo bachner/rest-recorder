@@ -12,19 +12,36 @@ const options = 'utf8';
 // App
 const app = express();
 app.get('/data', (req, res) => {
+    const {query} = req;
+    let keys = Object.keys(query);
+    let filter = (param) => true;
+    if (keys.length) {
+        filter = (field) => jsonParse(field)[keys[0]] === query[keys[0]];
+    }
 
     fs.readFile(dataFile, options, function (err, data) {
         if (err) throw err;
-        res.send(`${data}`);
+        let result = data.split('\n').filter(filter);
+        res.send(`${result}`);
     });
 });
 
-app.get('*', (req, res) => {
+function storeRequest(req, res) {
     const {baseUrl, path, route, query, params, originalUrl, hostname, ip, ips, cookies, body, headers} = req;
     const data = {baseUrl, path, route, query, params, originalUrl, hostname, ip, ips, cookies, body, headers};
     console.log(data);
-    fs.appendFileSync(dataFile, JSON.stringify(data), options);
+    fs.appendFileSync(dataFile, JSON.stringify(data) + '\n', options);
     res.send(data);
+}
+
+app.post('*', (req, res) => {
+    storeRequest(req, res);
+});
+
+app.get('*', (req, res) => {
+    if (!req.originalUrl.startsWith('/data')) {
+        storeRequest(req, res);
+    }
 });
 
 initDataFile();
@@ -41,4 +58,12 @@ function initDataFile() {
             fs.writeFileSync(dataFile, '', options);
         }
     });
+}
+
+function jsonParse(str) {
+    try {
+        return JSON.parse(str);
+    } catch (e) {
+        return {};
+    }
 }
