@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  ofer-app:
+    image: bachner/docker-demo:latest
+    ports: 
+      - 18080:6060
+    networks:
+      - ofer-network
+networks:
+  ofer-network:
+    driver: overlay
