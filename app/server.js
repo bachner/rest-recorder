@@ -13,16 +13,16 @@ const options = 'utf8';
 const app = express();
 app.get('/data', (req, res) => {
     const {query} = req;
-    let keys = Object.keys(query);
-    let filter = (param) => true;
+    const  keys = Object.keys(query);
+    let filter = (param) => param.length;
     if (keys.length) {
-        filter = (field) => jsonParse(field)[keys[0]] === query[keys[0]];
+        filter = (field) => keys.every(key => jsonParse(field)[key] === query[key]);
     }
 
     fs.readFile(dataFile, options, function (err, data) {
         if (err) throw err;
-        let result = data.split('\n').filter(filter);
-        res.send(`${result}`);
+        const result = data.split('\n').filter(filter);
+        res.send(result);
     });
 });
 
