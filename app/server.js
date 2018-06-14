@@ -4,7 +4,7 @@ const express = require('express');
 const fs = require('fs');
 
 // Constants
-const PORT = 6060;
+const PORT = process.env.PORT || 6060
 const HOST = '0.0.0.0';
 const dataFile = 'data.txt';
 const options = 'utf8';
