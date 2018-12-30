@@ -3,6 +3,7 @@
   "scripts": {
   },
   "env": {
+    "BUILD_DIR": "app"
   },
   "formation": {
   },
