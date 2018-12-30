@@ -1,0 +1,19 @@
+{
+  "name": "rest-recorder",
+  "scripts": {
+  },
+  "env": {
+    "BUILD_DIR": "app"
+  },
+  "formation": {
+  },
+  "addons": [
+
+  ],
+  "stack": "heroku-18",
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ]
+}
